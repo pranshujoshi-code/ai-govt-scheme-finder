@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YojanaMitra AI — Indian Govt Scheme & Scholarship Finder</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --accent: #ea580c;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --border: #cbd5e1;
+    }
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6; }
+    header {
+      background: linear-gradient(135deg, var(--primary), #1d4ed8);
+      color: #fff; padding: 1.5rem 1rem; text-align: center;
+      border-bottom: 4px solid var(--accent);
+    }
+    header h1 { margin: 0; font-size: 1.6rem; }
+    header p { margin: 0.4rem 0 0; opacity: 0.9; font-size: 0.95rem; }
+    .container { max-width: 900px; margin: 1.5rem auto; padding: 0 1rem; }
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 10px; padding: 1.5rem; margin-bottom: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    label { display: block; font-weight: 600; font-size: 0.88rem; margin-bottom: 0.3rem; }
+    input, select {
+      width: 100%; padding: 0.6rem; border: 1px solid var(--border);
+      border-radius: 6px; font-size: 0.95rem;
+    }
+    .api-box { background: #eff6ff; border: 1px dashed #93c5fd; padding: 1rem; border-radius: 8px; margin-bottom: 1.2rem; }
+    button {
+      background: var(--primary); color: #fff; border: none; padding: 0.8rem 1.5rem;
+      font-size: 1rem; font-weight: 600; border-radius: 6px; cursor: pointer;
+      width: 100%; margin-top: 1rem; transition: background 0.2s;
+    }
+    button:hover { background: #172554; }
+    button:disabled { background: #94a3b8; cursor: not-allowed; }
+    #output { white-space: normal; }
+    #output h3 { color: var(--primary); border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3rem; margin-top: 1.4rem; }
+    #output ul { padding-left: 1.2rem; }
+    .disclaimer {
+      font-size: 0.82rem; color: #475569; background: #f1f5f9;
+      padding: 0.8rem; border-radius: 6px; margin-top: 1rem;
+    }
+    .loader { display: none; text-align: center; font-weight: 600; color: var(--primary); padding: 1rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🇮🇳 YojanaMitra AI</h1>
+  <p>Personalized Indian Government Scheme & Scholarship Eligibility Finder</p>
+</header>
+
+<div class="container">
+  <div class="card">
+    <div class="api-box">
+      <label for="apiKey">Google Gemini API Key (Get free key from aistudio.google.com)</label>
+      <input type="password" id="apiKey" placeholder="Paste your AIzaSy... API key here" />
+    </div>
+
+    <div class="grid">
+      <div>
+        <label for="age">Age (Years)</label>
+        <input type="number" id="age" min="1" max="100" value="20" />
+      </div>
+      <div>
+        <label for="gender">Gender</label>
+        <select id="gender">
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="state">State / Union Territory</label>
+        <select id="state">
+          <option value="Gujarat">Gujarat</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Rajasthan">Rajasthan</option>
+          <option value="Delhi">Delhi</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="All India (Central Schemes Only)">All India (Central Schemes Only)</option>
+        </select>
+      </div>
+      <div>
+        <label for="category">Social Category</label>
+        <select id="category">
+          <option value="General">General</option>
+          <option value="EWS (Economically Weaker Section)">EWS</option>
+          <option value="OBC (Other Backward Class)">OBC</option>
+          <option value="SC (Scheduled Caste)">SC</option>
+          <option value="ST (Scheduled Tribe)">ST</option>
+          <option value="Minority">Minority</option>
+        </select>
+      </div>
+      <div>
+        <label for="income">Annual Family Income (₹)</label>
+        <select id="income">
+          <option value="Below ₹1,00,000">Below ₹1,00,000</option>
+          <option value="₹1,00,000 to ₹2,50,000" selected>₹1,00,000 to ₹2,50,000</option>
+          <option value="₹2,50,000 to ₹5,00,000">₹2,50,000 to ₹5,00,000</option>
+          <option value="₹5,00,000 to ₹8,00,000">₹5,00,000 to ₹8,00,000</option>
+          <option value="Above ₹8,00,000">Above ₹8,00,000</option>
+        </select>
+      </div>
+      <div>
+        <label for="profile">Current Status / Occupation</label>
+        <select id="profile">
+          <option value="Undergraduate College Student" selected>Undergraduate College Student</option>
+          <option value="Postgraduate Student">Postgraduate Student</option>
+          <option value="School Student (Class 9-12)">School Student (Class 9-12)</option>
+          <option value="Farmer / Agricultural Worker">Farmer / Agricultural Worker</option>
+          <option value="Small Business / Startup Entrepreneur">Small Business / Entrepreneur</option>
+          <option value="Unemployed Youth / Skill Seeker">Unemployed Youth / Skill Seeker</option>
+          <option value="Senior Citizen">Senior Citizen</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="searchBtn" onclick="findSchemes()">Find Eligible Schemes & Scholarships</button>
+    <div id="loader" class="loader">🔍 Searching Central & State Government databases via Gemini AI...</div>
+  </div>
+
+  <div class="card" id="resultCard" style="display:none;">
+    <div id="output"></div>
+    <div class="disclaimer">
+      <strong>Verification Note:</strong> Always confirm final deadlines and submit applications only on official government portals such as <strong>myscheme.gov.in</strong> or <strong>scholarships.gov.in</strong>.
+    </div>
+  </div>
+</div>
+
+<script>
+  const SYSTEM_PROMPT = `You are an expert Indian Government Scheme and Scholarship Advisor.
+Given a citizen's profile, identify 4 to 5 active, genuine Central Government and State-specific schemes or scholarships they are most likely eligible for.
+Rules:
+1. Prioritise verifiable schemes listed on myScheme.gov.in or the National Scholarship Portal (scholarships.gov.in).
+2. Use Indian currency formatting (₹, Lakhs).
+3. Format each scheme cleanly using Markdown with:
+   ### [Number]. [Scheme Name] ([Central / State])
+   - **Key Benefit:** Exact financial assistance, subsidy, or scholarship amount.
+   - **Eligibility Match:** Why this user's age, income, category, or status qualifies.
+   - **Documents Needed:** Bullet list (e.g., Aadhaar, Income Certificate, Caste Certificate, NSP OTR ID, Bank Passbook).
+   - **Where to Apply:** Official portal URL.
+4. Keep descriptions crisp, factual, and easy to scan.`;
+
+  function formatMarkdown(md) {
+    return md
+      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/^\- (.*$)/gim, '<li>$1</li>')
+      .replace(/(<li>.*<\/li>)/gms, '<ul>$1</ul>')
+      .replace(/<\/ul>\s*<ul>/g, '')
+      .replace(/\n\n/g, '<br/>');
+  }
+
+  async function findSchemes() {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    if (!apiKey) {
+      alert('Please enter your Google Gemini API key first.');
+      return;
+    }
+
+    const userPrompt = `Find eligible Indian government schemes and scholarships for this profile:
+- Age: ${document.getElementById('age').value} years
+- Gender: ${document.getElementById('gender').value}
+- State/UT: ${document.getElementById('state').value}
+- Social Category: ${document.getElementById('category').value}
+- Annual Family Income: ${document.getElementById('income').value}
+- Occupation/Education: ${document.getElementById('profile').value}`;
+
+    const btn = document.getElementById('searchBtn');
+    const loader = document.getElementById('loader');
+    const resultCard = document.getElementById('resultCard');
+    const output = document.getElementById('output');
+
+    btn.disabled = true;
+    loader.style.display = 'block';
+    resultCard.style.display = 'none';
+
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const payload = {
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+      tools: [{ google_search: {} }]
+    };
+
+    try {
+      let response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      // Fallback if search grounding tool is restricted on the API key tier
+      if (!response.ok) {
+        delete payload.tools;
+        response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error?.message || 'API request failed');
+      }
+
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No schemes returned.';
+      output.innerHTML = formatMarkdown(text);
+      resultCard.style.display = 'block';
+    } catch (err) {
+      output.innerHTML = `<p style="color:#dc2626;"><strong>Error:</strong> ${err.message}</p>`;
+      resultCard.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+      loader.style.display = 'none';
+    }
+  }
+</script>
+
+</body>
+</html>
